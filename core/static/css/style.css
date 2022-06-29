@@ -1,0 +1,85 @@
+:root {
+    --logo-gray: #2f2c2c;
+}
+
+* {
+    /* font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles"); */
+    font-family: sans-serif;
+    color: var(--logo-gray);
+}
+
+body {
+    margin: 0;
+}
+
+header {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    background-image: url('../images/texture.png');
+
+    box-shadow: var(--logo-gray) 0px 0px 30px;
+}
+
+header > #logo > a {
+    padding-left: 50px;
+
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+}
+
+header img {
+    width: 40px;
+    padding: 20px;
+}
+
+header > nav {
+    width: 250px;
+    padding-right: 50px;
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+header > nav > a {
+    text-decoration: none;
+    font-size: larger;
+}
+
+main {
+    z-index: 1;
+
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    
+    background-color: #E9E9E9AA;
+
+    box-shadow: var(--logo-gray) 0px 0px 30px;
+}
+
+main p {
+    text-align: justify;
+}
+
+footer {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    
+    background-image: url('../images/texture.png');
+
+    box-shadow: var(--logo-gray) 0px 0px 30px;
+}
