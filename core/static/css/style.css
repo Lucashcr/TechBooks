@@ -1,11 +1,13 @@
 :root {
-    --logo-gray: #2f2c2c;
+    --dark-gray: #2f2c2c;
+    --medium-gray: #5f5c5c;
+    --light-gray: #dfdcdc;
 }
 
 * {
     /* font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles"); */
     font-family: sans-serif;
-    color: var(--logo-gray);
+    color: var(--dark-gray);
 }
 
 body {
@@ -21,9 +23,9 @@ header {
     align-items: center;
     justify-content: space-between;
 
-    background-image: url('../images/texture.png');
+    background-color: var(--light-gray); /* url('../images/texture.png'); */
 
-    box-shadow: var(--logo-gray) 0px 0px 30px;
+    box-shadow: var(--dark-gray) 0px -5px 30px;
 }
 
 header > #logo > a {
@@ -41,7 +43,7 @@ header img {
 }
 
 header > nav {
-    width: 250px;
+    width: 300px;
     padding-right: 50px;
     
     display: flex;
@@ -54,16 +56,20 @@ header > nav > a {
     font-size: larger;
 }
 
+header > nav > a:hover {
+    color: var(--medium-gray);
+}
+
 main {
     z-index: 1;
 
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
     
-    background-color: #E9E9E9AA;
+    background-color: var(--light-gray);
 
-    box-shadow: var(--logo-gray) 0px 0px 30px;
+    box-shadow: var(--dark-gray) 0px 0px 10px;
 }
 
 main p {
@@ -79,7 +85,7 @@ footer {
     align-items: center;
     justify-content: center;
     
-    background-image: url('../images/texture.png');
+    background-color: var(--light-gray); /* url('../images/texture.png'); */
 
-    box-shadow: var(--logo-gray) 0px 0px 30px;
+    box-shadow: var(--dark-gray) 0px 5px 30px;
 }
