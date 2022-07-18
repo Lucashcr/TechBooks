@@ -22,5 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', core.views.Home.as_view()),
     path('login', core.views.Login.as_view()),
-    path('login/submit', core.views.SubmitLogin.as_view())
+    path('login/submit', core.views.SubmitLogin.as_view()),
+    path('books/', core.views.ListBooks.as_view()),
+    path('books/<book_id>', core.views.ReadBook.as_view())
 ]

@@ -76,6 +76,16 @@ main p {
     text-align: justify;
 }
 
+main iframe {
+    display: block;
+
+    width: 100%;
+    height: 90vh;
+
+    border: 2px solid var(--medium-gray);
+    border-radius: 10px;
+}
+
 footer {
     position: relative;
     z-index: 2;
