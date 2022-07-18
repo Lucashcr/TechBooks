@@ -67,10 +67,15 @@ class ReadBook(TemplateView):
         #     book_url = ''
         #     is_page = True
 
-        book = Book.objects.get(id=book_id)
+        try:
+            book = Book.objects.get(id=book_id)
+            title = book.name
+        except:
+            book = None
+            title = 'Livro não enontrado'
         
         extra_context = {
-            'title': f'Techbooks - {book.name}',
+            'title': f'Techbooks - {title}',
             'book': book
         }
         

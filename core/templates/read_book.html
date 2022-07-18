@@ -8,7 +8,7 @@
 <p>Logado com {{request.user}}</p>
 
 <!-- <embed src="{{book_url}}" type=""> -->
-{% if book %}
+{% if book is not None %}
     {% if book.is_page %}
     <iframe src="{{ book.url }}{{ section }}">
     {% else %}
