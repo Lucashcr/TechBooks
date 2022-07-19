@@ -1,8 +1,7 @@
-from datetime import datetime
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
-from django.views.generic import TemplateView, FormView, ListView
-from django.contrib.auth import authenticate, login
+from django.views import View
+from django.views.generic import TemplateView, FormView, ListView, View
+from django.contrib.auth import authenticate, login, logout
 
 
 from .models import Book
@@ -18,13 +17,14 @@ class Login(FormView):
     template_name = 'login.html'
     extra_context = {
         'title': 'TechBooks - Login', 
-        'error': False
     }
     
     def get(self, request, *args, **kwargs):
-        self.extra_context['error'] = kwargs.get('error')
-        self.return_url = kwargs.get('return_url')
-        print("URL de retorno:", kwargs.get('return_url'))
+        if request.user.is_authenticated:
+            _next = request.GET.get('next')
+            return redirect(_next if _next is not None else '/books/')
+        
+        self.extra_context['error'] = request.GET.get('error')
         return render(request, self.template_name, self.extra_context)
     
     def post(self, request, *args, **kwargs):
@@ -33,40 +33,29 @@ class Login(FormView):
         
         auth = authenticate(username=username, password=password)
         
-        if username is not None:
+        if auth is not None:
             login(request, auth)
-            print(kwargs.get('return_url'))
-            return redirect(request.return_url)
-            # return render(request, self.template_name, self.extra_context)
-
-    
-class SubmitLogin(TemplateView):
-    template_name = 'submit_login.html'
-    extra_context = {'title': 'TechBooks - Login efetuado'}
+            _next = request.GET.get('next')
+            return redirect(_next if _next is not None else '/books/')
+        else:
+            _next = request.GET.get('next')
+            return redirect(f'/login/?{f"next={_next}&" if _next is not None else ""}error=1')        
+        
+        
+class Logout(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect('/')
     
 
 class ReadBook(TemplateView):
     template_name = 'read_book.html'
-    # login_required = True
     
     def get(self, request, book_id):
-    #     if str(request.user) == 'AnonymousUser':
-    #         print("URL de retorno:", request.path)
-    #         return redirect('/login', return_url=request.path)
+        # if str(request.user) == 'AnonymousUser':
+        #     print("URL de retorno:", request.path)
+        #     return redirect('/login', return_url=request.path)
         
-        # if book_code == 'think-julia':
-        #     book_name = 'Julia Intro'
-        #     book_url = 'https://juliaintro.github.io/JuliaIntroBR.jl/'
-        #     is_page = True
-        # elif book_code == 'python-para-devs':
-        #     book_name = 'Python para desenvolvedores'
-        #     book_url = '/books/python/python-para-desenvolvedores.pdf'
-        #     is_page = False
-        # else:
-        #     book_name = 'Livro não encontrado'
-        #     book_url = ''
-        #     is_page = True
-
         try:
             book = Book.objects.get(id=book_id)
             title = book.name

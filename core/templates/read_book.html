@@ -1,21 +1,29 @@
-{% extends 'base/base.html' %}
 {% load static %}
 
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
 
-<h1>{{book.name}}</h1>
-
-<p>Logado com {{request.user}}</p>
-
-<!-- <embed src="{{book_url}}" type=""> -->
-{% if book is not None %}
-    {% if book.is_page %}
-    <iframe src="{{ book.url }}{{ section }}">
-    {% else %}
-    <iframe src="{% static book.url %}{{ section }}" type="application/pdf">
+    <link rel="stylesheet" href="{% static 'css/read_book.css' %}">
+</head>
+<body>
+    <main>
+    <h1>Você está lendo: {{book.name}}</h1>
+    <p>Logado com {{request.user}}</p>
+    {% if book is not None %}
+        {% if book.is_page %}
+        <iframe src="{{ book.url }}{{ section }}">
+        {% else %}
+        <iframe src="{% static book.url %}{{ section }}" type="application/pdf">
+        {% endif %}
+        {% else %}
+        <p>Sinto muito, não encontramos o livro que você está buscando. Que tal voltar ao nosso <a href="/books/">catálogo</a> e tentar novamente?</p>
     {% endif %}
-{% else %}
-    <p>Sinto muito, não encontramos o livro que você está buscando. Que tal voltar ao nosso <a href="/books/">catálogo</a> e tentar novamente?</p>
-{% endif %}
+    </main>
+</body>
+</html>
 
-{% endblock %}

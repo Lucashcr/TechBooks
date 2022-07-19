@@ -15,14 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.contrib.auth.decorators import login_required
+
 
 import core.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', core.views.Home.as_view()),
-    path('login', core.views.Login.as_view()),
-    path('login/submit', core.views.SubmitLogin.as_view()),
+    path('login/', core.views.Login.as_view()),
+    path('logout', core.views.Logout.as_view()),
     path('books/', core.views.ListBooks.as_view()),
-    path('books/<book_id>', core.views.ReadBook.as_view())
+    path('books/<book_id>', login_required(core.views.ReadBook.as_view(), login_url='/login/'))
 ]

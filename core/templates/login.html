@@ -26,12 +26,12 @@
                 <input type="password" name="password">
             </fieldset>
             <button type="submit">Entrar</button>
-            {% if error %}
-            <p style="color: red;">Erro: Usuário ou senha incorreta</p>
-            {% else %}
-            <p></p>
-            {% endif %}
         </form>
+        {% if error == '1' %}
+        <div id="error-msg">
+            <p>Erro: Usuário ou senha incorreta</p>
+        </div>
+        {% endif %}
         <div class="links">
             <a href="#">Cadastrar-se</a>
             <a href="#">Recuperar senha</a>

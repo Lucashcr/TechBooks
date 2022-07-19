@@ -1,0 +1,33 @@
+:root {
+    --dark-gray: #2f2c2c;
+    --medium-gray: #5f5c5c;
+    --light-gray: #dfdcdc;
+}
+
+* {
+    /* font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles"); */
+    font-family: sans-serif;
+    color: var(--dark-gray);
+}
+
+body {
+    margin: 0;
+    background-color: var(--light-gray);
+}
+
+main {
+    width: 97vw;
+    height: 95vh;
+
+    margin: auto;
+}
+
+main iframe {
+    display: block;
+
+    width: 100%;
+    height: 90%;
+
+    border: 2px solid var(--medium-gray);
+    border-radius: 10px;
+}
