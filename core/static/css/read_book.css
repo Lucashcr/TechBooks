@@ -5,7 +5,7 @@
 }
 
 * {
-    /* font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles"); */
+    font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles");
     font-family: sans-serif;
     color: var(--dark-gray);
 }

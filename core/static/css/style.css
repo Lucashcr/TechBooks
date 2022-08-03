@@ -1,12 +1,12 @@
 :root {
-    --dark-gray: #2f2c2c;
-    --medium-gray: #5f5c5c;
-    --light-gray: #dfdcdc;
+    --dark-gray: #2f2f38;
+    --medium-gray: #5c5c5f;
+    --light-gray: #dcdcdf;
 }
 
 * {
-    /* font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles"); */
-    font-family: sans-serif;
+    font-family: url("https://fonts.google.com/specimen/Share+Tech?query=tec#standard-styles");
+    /* font-family: sans-serif; */
     color: var(--dark-gray);
 }
 
