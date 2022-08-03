@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+
+
+{% block content %}
+    <h1>Assuntos disponíveis para consulta</h1>
+    {% if subject_list %}
+        <ul>
+            {% for subject in subject_list %}
+            <li>
+                <a href="/books/{{ subject.name.lower }}">{{ subject.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>There are no subjects in the library.</p>
+    {% endif %}
+{% endblock %}

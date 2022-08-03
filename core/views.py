@@ -4,7 +4,7 @@ from django.views.generic import TemplateView, FormView, ListView, View
 from django.contrib.auth import authenticate, login, logout
 
 
-from .models import Book
+from .models import Book, Subject
 
 
 # Create your views here.
@@ -51,13 +51,10 @@ class Logout(View):
 class ReadBook(TemplateView):
     template_name = 'read_book.html'
     
-    def get(self, request, book_id):
-        # if str(request.user) == 'AnonymousUser':
-        #     print("URL de retorno:", request.path)
-        #     return redirect('/login', return_url=request.path)
-        
+    def get(self, request, subject_slug, book_slug):
         try:
-            book = Book.objects.get(id=book_id)
+            book = Book.objects.get(slug=book_slug)
+            subject = Subject.objects.get(slug=subject_slug)
             title = book.name
         except:
             book = None
@@ -65,21 +62,69 @@ class ReadBook(TemplateView):
         
         extra_context = {
             'title': f'Techbooks - {title}',
-            'book': book
+            'book': book,
+            'subject': subject
         }
         
         return render(request, template_name='read_book.html', context=extra_context)
         
         
-class ListBooks(ListView):
-    model = Book
-    context_object_name = 'book_list'
-    queryset = Book.objects.all()
+class ListBooks(TemplateView):
     template_name = 'book_list.html'
-    
-    # paginate_by = 100  # if pagination is desired
-    
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['now'] = datetime.now()
-    #     return context
+
+    def get(self, request):
+        try:
+            subject_list = Subject.objects.all()
+            book_list = Book.objects.all()
+        except:
+            subject_list = None
+            book_list = None
+        
+        extra_context = {
+            'title': f'Techbooks - Livros',
+            'book_list': book_list,
+            'filtered': False,
+            'subject_list': subject_list,
+            'book_list': book_list
+        }
+        
+        return render(request, template_name='book_list.html', context=extra_context)
+    # model = Book
+    # context_object_name = 'book_list'
+    # queryset = Book.objects.all()
+    # template_name = 'book_list.html'
+    # context = {
+    #     'title': f'Techbooks - Livros',
+    #     'filtered': False,
+    #     'subject_list': Subject.objects.all()
+    # }
+
+
+class ListSubjects(ListView):
+    model = Subject
+    context_object_name = 'subject_list'
+    queryset = Subject.objects.all()
+    template_name = 'subject_list.html'
+
+
+class ListBooksBySubject(TemplateView):
+    template_name = 'book_list.html'
+
+    def get(self, request, subject_slug):
+        try:
+            subject = Subject.objects.get(slug=subject_slug)
+            book_list = [Book.objects.get(subject_id=subject.id)]
+            title = subject.name
+        except:
+            book_list = None
+            title = 'Livro não enontrado'
+        
+        extra_context = {
+            'title': f'Techbooks - {title}',
+            'book_list': book_list,
+            'filtered': True,
+            'subject_list': None,
+            'subject': subject
+        }
+        
+        return render(request, template_name='book_list.html', context=extra_context)

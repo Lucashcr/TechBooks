@@ -4,13 +4,24 @@
 {% block content %}
     <h1>Livros disponíveis para consulta</h1>
     {% if book_list %}
+        {% if filtered %}
         <ul>
             {% for book in book_list %}
             <li>
-                <a href="{{ book.id }}">{{ book.name }}</a>
+                <a href="{{ book.slug }}">{{ book.name }}</a>
             </li>
             {% endfor %}
         </ul>
+        {% else %}
+        <h2>Que tal filtrar pelo assunto?</h2>
+        <ul>
+            {% for subject in subject_list %}
+            <li>
+                <a href="{{ subject.slug }}">{{ subject.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     {% else %}
         <p>There are no books in the library.</p>
     {% endif %}
