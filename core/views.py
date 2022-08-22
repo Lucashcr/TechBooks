@@ -63,7 +63,8 @@ class ReadBook(TemplateView):
         extra_context = {
             'title': f'Techbooks - {title}',
             'book': book,
-            'subject': subject
+            'subject': subject,
+            'section': '/#_por_que_julia'
         }
         
         return render(request, template_name='read_book.html', context=extra_context)
@@ -111,20 +112,17 @@ class ListBooksBySubject(TemplateView):
     template_name = 'book_list.html'
 
     def get(self, request, subject_slug):
+        extra_context = {}
+        
         try:
             subject = Subject.objects.get(slug=subject_slug)
-            book_list = [Book.objects.get(subject_id=subject.id)]
-            title = subject.name
+            extra_context['book_list'] = Book.objects.filter(subject_id=subject.id)
+            extra_context['title'] = f'Techbooks - {subject.name}'
+            extra_context["subject"] = subject
+            extra_context['filtered'] = True
         except:
-            book_list = None
-            title = 'Livro não enontrado'
-        
-        extra_context = {
-            'title': f'Techbooks - {title}',
-            'book_list': book_list,
-            'filtered': True,
-            'subject_list': None,
-            'subject': subject
-        }
-        
+            extra_context['book_list'] = None
+            extra_context['title'] = 'Livro não enontrado'
+            extra_context['filtered'] = False
+                
         return render(request, template_name='book_list.html', context=extra_context)

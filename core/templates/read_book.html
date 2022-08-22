@@ -9,12 +9,14 @@
     <title>{{title}}</title>
 
     <link rel="stylesheet" href="{% static 'css/read_book.css' %}">
+
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.png' %}">
 </head>
 <body>
     <main>
     <h1>Você está lendo: {{book.name}}</h1>
     <p>Logado com {{request.user}}</p>
-    {% if book is not None %}
+    {% if book %}
         {% if book.is_page %}
         <iframe src="{{ book.url }}{{ section }}">
         {% else %}

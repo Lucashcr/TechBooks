@@ -4,13 +4,14 @@
 {% block content %}
     <h1>Assuntos disponíveis para consulta</h1>
     {% if subject_list %}
-        <ul>
+        <div class="subject_cards">
             {% for subject in subject_list %}
-            <li>
-                <a href="/books/{{ subject.name.lower }}">{{ subject.name }}</a>
-            </li>
+            <a href="/books/{{ subject.slug }}" class="card">
+                <img src="{{ subject.image }}" alt="logo" width="100px" height="50px">
+                <p>{{ subject.name }}</p>
+            </a>
             {% endfor %}
-        </ul>
+        </div>
     {% else %}
         <p>There are no subjects in the library.</p>
     {% endif %}

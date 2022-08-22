@@ -76,6 +76,32 @@ main p {
     text-align: justify;
 }
 
+main .subject_cards {
+    display: flex;
+}
+
+main .subject_cards .card {
+    margin: 10px;
+    text-decoration: none;
+    border: 2px solid var(--dark-gray);
+}
+
+main .subject_cards .card img {
+    object-fit: contain;
+    width: 150px;
+    height: 75px;
+    margin: 10px;
+}
+
+main .subject_cards .card p {
+    background-color: var(--dark-gray);
+    color: var(--light-gray);
+    margin: 0 auto;
+    padding: 5px;
+    text-align: center;
+    font-size: larger;
+}
+
 main iframe {
     display: block;
 
