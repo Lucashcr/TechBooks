@@ -1,7 +1,9 @@
+from pipes import Template
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, View
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 
 
 from .models import Book, Subject
@@ -39,7 +41,7 @@ class Login(FormView):
             return redirect(_next if _next is not None else '/books/')
         else:
             _next = request.GET.get('next')
-            return redirect(f'/login/?{f"next={_next}&" if _next is not None else ""}error=1')        
+            return redirect(f'/login/?{f"next={_next}&" if _next is not None else ""}error=1')
         
         
 class Logout(View):
@@ -126,3 +128,44 @@ class ListBooksBySubject(TemplateView):
             extra_context['filtered'] = False
                 
         return render(request, template_name='book_list.html', context=extra_context)
+
+
+class SignUp(TemplateView):
+    template_name = 'signup.html'
+    extra_context = {}
+
+    def get(self, request):
+        self.extra_context['error'] = request.GET.get('error')
+        return render(request, self.template_name, self.extra_context)
+
+    
+    def post(self, request):
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm-password')
+        
+        try:
+            User.objects.get(username=username)
+        except User.DoesNotExist:
+            username_exists = False
+        else:
+            username_exists = True
+        
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            email_exists = False
+        else:
+            email_exists = True
+            
+        if username_exists or email_exists:
+            return redirect('/signup/?error=1')
+
+        if password != confirm_password:
+            return redirect('/signup/?error=2')
+
+        new_user = User(username=username, email=email, password=password)
+        new_user.save()
+
+        print('cadastrado com sucesso')

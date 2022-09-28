@@ -27,5 +27,6 @@ urlpatterns = [
     path('logout', core.views.Logout.as_view()),
     path('books/', core.views.ListSubjects.as_view()),
     path('books/<subject_slug>/', core.views.ListBooksBySubject.as_view()),
-    path('books/<subject_slug>/<book_slug>', login_required(core.views.ReadBook.as_view(), login_url='/login/'))
+    path('books/<subject_slug>/<book_slug>', login_required(core.views.ReadBook.as_view(), login_url='/login/')),
+    path('signup/', core.views.SignUp.as_view()),
 ]

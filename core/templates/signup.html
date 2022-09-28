@@ -14,7 +14,7 @@
 </head>
 <body>
     <main>
-        <h1>Login</h1>
+        <h1>Cadastrar</h1>
 
         <form action="" method="POST"> {% csrf_token %}
             <fieldset>
@@ -22,20 +22,32 @@
                 <input type="text" name="username">
             </fieldset>
             <fieldset>
+                <label for="email" placeholder="your-email">Email</label>
+                <input type="email" name="email">
+            </fieldset>
+            <fieldset>
                 <label for="password" placeholder="your-password">Senha</label>
                 <input type="password" name="password">
             </fieldset>
-            <button type="submit">Entrar</button>
+            <fieldset>
+                <label for="confirm-password" placeholder="confirm-your-password">Confirmar senha</label>
+                <input type="password" name="confirm-password">
+            </fieldset>
+            <button type="submit">Cadastrar</button>
         </form>
         {% if error == '1' %}
         <div id="error-msg">
-            <p>Erro: Usuário ou senha incorreta</p>
+            <p>Erro: Usuário ou email cadastrado</p>
+        </div>
+        {% elif error == '2' %}
+        <div id="error-msg">
+            <p>Erro: As senhas não correspondem</p>
         </div>
         {% endif %}
-        <div class="links">
+        <!-- <div class="links">
             <a href="#">Cadastrar-se</a>
             <a href="#">Recuperar senha</a>
-        </div>
+        </div> -->
     </main>
 </body>
 </html>
