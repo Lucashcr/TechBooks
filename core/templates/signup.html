@@ -19,11 +19,19 @@
         <form action="" method="POST"> {% csrf_token %}
             <fieldset>
                 <label for="username" placeholder="your-username">Nome de usuário</label>
-                <input type="text" name="username">
+                <input type="text" name="username" value="{{request.GET.username}}">
             </fieldset>
             <fieldset>
                 <label for="email" placeholder="your-email">Email</label>
                 <input type="email" name="email">
+            </fieldset>
+            <fieldset>
+                <label for="first-name" placeholder="your-first-name">Nome</label>
+                <input type="first-name" name="first-name">
+            </fieldset>
+            <fieldset>
+                <label for="last-name" placeholder="your-last-name">Sobrenome</label>
+                <input type="last-name" name="last-name">
             </fieldset>
             <fieldset>
                 <label for="password" placeholder="your-password">Senha</label>
@@ -42,6 +50,13 @@
         {% elif error == '2' %}
         <div id="error-msg">
             <p>Erro: As senhas não correspondem</p>
+        </div>
+        {% elif error == '3' %}
+        <div id="error-msg">
+            <p>Erro: Senha inválida</p>
+            {% for m in msg %}
+            <p>{{m}}</p>
+            {% endfor %}
         </div>
         {% endif %}
         <!-- <div class="links">

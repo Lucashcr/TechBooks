@@ -1,7 +1,7 @@
 :root {
-    --dark-gray: #2f2f38;
-    --medium-gray: #5c5c5f;
-    --light-gray: #dcdcdf;
+    --dark-gray: #1f1f20;
+    --medium-gray: #2b4c7e;
+    --light-gray: #dce0e6;
 }
 
 * {
@@ -43,12 +43,13 @@ header img {
 }
 
 header > nav {
-    width: 300px;
+    width: 350px;
     padding-right: 50px;
     
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
 
 header > nav > a {
@@ -58,6 +59,23 @@ header > nav > a {
 
 header > nav > a:hover {
     color: var(--medium-gray);
+}
+
+.btn-login {
+    text-decoration: none;
+    font-size: larger;
+        
+    text-align: center;
+    padding: 10px 20px;
+    border-radius: 20px;
+
+    background-color: var(--dark-gray);
+    color: var(--light-gray);
+}
+
+.btn-login:hover {
+    background-color: var(--medium-gray);
+    color: var(--light-gray);
 }
 
 main {
@@ -78,6 +96,7 @@ main p {
 
 main .subject_cards {
     display: flex;
+    justify-content: center;
 }
 
 main .subject_cards .card {

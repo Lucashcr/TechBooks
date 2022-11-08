@@ -8,6 +8,10 @@ Usuário de Administração:
 > User: admin
 > Pass: myfirstdjangoapp123 
 
+> User: teste123
+> Pass: testuser159
+
 
 Próximos passos:
-- [ ] Formulário de cadastro de usuários
+- [x] Formulário de cadastro de usuários
+- [ ] Confirmar email ao cadastrar

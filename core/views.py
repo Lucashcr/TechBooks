@@ -1,10 +1,8 @@
-from pipes import Template
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, View
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.models import User
-
 
 from .models import Book, Subject
 
@@ -66,7 +64,7 @@ class ReadBook(TemplateView):
             'title': f'Techbooks - {title}',
             'book': book,
             'subject': subject,
-            'section': '/#_por_que_julia'
+            'section': ''
         }
         
         return render(request, template_name='read_book.html', context=extra_context)
@@ -106,7 +104,7 @@ class ListBooks(TemplateView):
 class ListSubjects(ListView):
     model = Subject
     context_object_name = 'subject_list'
-    queryset = Subject.objects.all()
+    queryset = sorted(Subject.objects.all(), key=lambda item: item.name)
     template_name = 'subject_list.html'
 
 
@@ -118,7 +116,8 @@ class ListBooksBySubject(TemplateView):
         
         try:
             subject = Subject.objects.get(slug=subject_slug)
-            extra_context['book_list'] = Book.objects.filter(subject_id=subject.id)
+            extra_context['book_list'] = sorted(Book.objects.filter(subject_id=subject.id),
+            key=lambda item: item.name)
             extra_context['title'] = f'Techbooks - {subject.name}'
             extra_context["subject"] = subject
             extra_context['filtered'] = True
@@ -136,12 +135,18 @@ class SignUp(TemplateView):
 
     def get(self, request):
         self.extra_context['error'] = request.GET.get('error')
+        msg = request.GET.get('msg')
+        if msg:
+            self.extra_context['msg'] = eval(msg)
+        self.extra_context['username'] = request.GET.get('username')
         return render(request, self.template_name, self.extra_context)
 
     
     def post(self, request):
         username = request.POST.get('username')
         email = request.POST.get('email')
+        first_name = request.POST.get('first-name')
+        last_name = request.POST.get('last-name')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
         
@@ -162,10 +167,16 @@ class SignUp(TemplateView):
         if username_exists or email_exists:
             return redirect('/signup/?error=1')
 
+        try:
+            password_validation.validate_password(password)
+        except Exception as msg:
+            return redirect(f'/signup/?error=3&msg={msg}',msg=msg)
+
         if password != confirm_password:
             return redirect('/signup/?error=2')
 
-        new_user = User(username=username, email=email, password=password)
+        new_user = User(username=username, email=email, password=password,
+                        first_name=first_name.strip(), last_name=last_name.strip())
         new_user.save()
 
-        print('cadastrado com sucesso')
+        return redirect('/login')

@@ -2,6 +2,9 @@
 
 
 {% block content %}
+    {% if request.user.is_authenticated %}
+    <h2>Bem-vindo, {{request.user.first_name}} {{request.user.last_name}}!</h2>
+    {% endif %}
     <h1>Assuntos disponíveis para consulta</h1>
     {% if subject_list %}
         <div class="subject_cards">
