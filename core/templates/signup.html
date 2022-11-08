@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link rel="stylesheet" href="{% static 'css/form.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.png' %}">
 
     <title>{{title}}</title>
 </head>
@@ -43,15 +43,15 @@
             </fieldset>
             <button type="submit">Cadastrar</button>
         </form>
-        {% if error == '1' %}
+        {% if error == 1 %}
         <div id="error-msg">
             <p>Erro: Usuário ou email cadastrado</p>
         </div>
-        {% elif error == '2' %}
+        {% elif error == 2 %}
         <div id="error-msg">
             <p>Erro: As senhas não correspondem</p>
         </div>
-        {% elif error == '3' %}
+        {% elif error == 3 %}
         <div id="error-msg">
             <p>Erro: Senha inválida</p>
             {% for m in msg %}

@@ -1,8 +1,12 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, HttpResponseRedirect
 from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, View
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.models import User
+
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import random, smtplib
 
 from .models import Book, Subject
 
@@ -21,10 +25,10 @@ class Login(FormView):
     
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            _next = request.GET.get('next')
+            _next = request.session.get('next')
             return redirect(_next if _next is not None else '/books/')
         
-        self.extra_context['error'] = request.GET.get('error')
+        self.extra_context['error'] = request.session.get('error')
         return render(request, self.template_name, self.extra_context)
     
     def post(self, request, *args, **kwargs):
@@ -35,11 +39,13 @@ class Login(FormView):
         
         if auth is not None:
             login(request, auth)
-            _next = request.GET.get('next')
+            _next = request.session.get('next')
             return redirect(_next if _next is not None else '/books/')
         else:
             _next = request.GET.get('next')
-            return redirect(f'/login/?{f"next={_next}&" if _next is not None else ""}error=1')
+            request.session['error'] = '1'
+            request.session['next'] = request.session.get('next')
+            return redirect(f'/login/')
         
         
 class Logout(View):
@@ -119,7 +125,7 @@ class ListBooksBySubject(TemplateView):
             extra_context['book_list'] = sorted(Book.objects.filter(subject_id=subject.id),
             key=lambda item: item.name)
             extra_context['title'] = f'Techbooks - {subject.name}'
-            extra_context["subject"] = subject
+            extra_context['subject'] = subject
             extra_context['filtered'] = True
         except:
             extra_context['book_list'] = None
@@ -134,10 +140,10 @@ class SignUp(TemplateView):
     extra_context = {}
 
     def get(self, request):
-        self.extra_context['error'] = request.GET.get('error')
-        msg = request.GET.get('msg')
+        self.extra_context['error'] = request.session.get('error')
+        msg = request.session.get('msg')
         if msg:
-            self.extra_context['msg'] = eval(msg)
+            self.extra_context['msg'] = msg
         self.extra_context['username'] = request.GET.get('username')
         return render(request, self.template_name, self.extra_context)
 
@@ -165,18 +171,31 @@ class SignUp(TemplateView):
             email_exists = True
             
         if username_exists or email_exists:
-            return redirect('/signup/?error=1')
+            request.session['error'] = 1
+            return redirect('/signup/')
+
+        if password != confirm_password:
+            request.session['error'] = 2
+            return redirect('/signup/')
 
         try:
             password_validation.validate_password(password)
         except Exception as msg:
-            return redirect(f'/signup/?error=3&msg={msg}',msg=msg)
+            request.session['error'] = 3
+            request.session['msg'] = tuple(msg)
 
-        if password != confirm_password:
-            return redirect('/signup/?error=2')
+            return redirect(f'/signup/')
 
-        new_user = User(username=username, email=email, password=password,
-                        first_name=first_name.strip(), last_name=last_name.strip())
-        new_user.save()
+        self.send_confirmation_email(email, first_name, username)
 
-        return redirect('/login')
+        return redirect('/confirm')
+
+        # new_user = User(username=username, email=email, password=password,
+        #                 first_name=first_name.strip(), last_name=last_name.strip())
+        # new_user.save()
+
+        # return redirect('/login')
+
+
+        def send_confirmation_email(self, email, first_name, username):
+            pass
