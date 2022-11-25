@@ -98,10 +98,12 @@ main p {
 
 main .subject_cards {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
 }
 
 main .subject_cards .card {
+    flex-grow: 1 0 21%;
     margin: 10px;
     text-decoration: none;
     border: 2px solid var(--dark-gray);
@@ -134,7 +136,9 @@ main iframe {
 }
 
 footer {
-    position: relative;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
     z-index: 2;
 
     display: flex;
