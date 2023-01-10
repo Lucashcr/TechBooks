@@ -64,6 +64,7 @@ class ReadBook(TemplateView):
             title = book.name
         except:
             book = None
+            subject = None
             title = 'Livro não enontrado'
         
         extra_context = {
@@ -96,15 +97,6 @@ class ListBooks(TemplateView):
         }
         
         return render(request, template_name='book_list.html', context=extra_context)
-    # model = Book
-    # context_object_name = 'book_list'
-    # queryset = Book.objects.all()
-    # template_name = 'book_list.html'
-    # context = {
-    #     'title': f'Techbooks - Livros',
-    #     'filtered': False,
-    #     'subject_list': Subject.objects.all()
-    # }
 
 
 class ListSubjects(ListView):
@@ -122,15 +114,17 @@ class ListBooksBySubject(TemplateView):
         
         try:
             subject = Subject.objects.get(slug=subject_slug)
-            extra_context['book_list'] = sorted(Book.objects.filter(subject_id=subject.id),
-            key=lambda item: item.name)
+            extra_context['book_list'] = sorted(
+                Book.objects.filter(subject_id=subject.id),
+                key=lambda item: item.name
+            )
             extra_context['title'] = f'Techbooks - {subject.name}'
             extra_context['subject'] = subject
             extra_context['filtered'] = True
         except:
-            extra_context['book_list'] = None
             extra_context['title'] = 'Livro não enontrado'
             extra_context['filtered'] = False
+            extra_context['book_list'] = None
                 
         return render(request, template_name='book_list.html', context=extra_context)
 
@@ -189,12 +183,6 @@ class SignUp(TemplateView):
         self.send_confirmation_email(email, first_name, username)
 
         return redirect('/confirm')
-
-        # new_user = User(username=username, email=email, password=password,
-        #                 first_name=first_name.strip(), last_name=last_name.strip())
-        # new_user.save()
-
-        # return redirect('/login')
 
 
         def send_confirmation_email(self, email, first_name, username):
