@@ -1,41 +1,31 @@
-{% load static %}
+{% extends 'base/form.html' %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block form %}
 
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.png' %}">
+<h1>Login</h1>
+<form action="" method="POST"> {% csrf_token %}
+    <fieldset>
+        <label for="username" placeholder="your-username">Nome de usuário</label>
+        <input type="text" name="username">
+    </fieldset>
+    <fieldset>
+        <label for="password" placeholder="your-password">Senha</label>
+        <input type="password" name="password">
+    </fieldset>
+    <button type="submit">Entrar</button>
+</form>
+{% if error == 1 %}
+<div id="error-msg">
+    <p>Erro: Usuário ou senha incorreta</p>
+</div>
+{% elif error == 2 %}
+<div id="sucess-msg">
+    <p>Usuário cadastrado com sucesso</p>
+</div>
+{% endif %}
+<div class="links">
+    <a href="/signup/">Cadastrar-se</a>
+    <a href="#">Recuperar senha</a>
+</div>
 
-    <title>{{title}}</title>
-</head>
-<body>
-    <main>
-        <h1>Login</h1>
-
-        <form action="" method="POST"> {% csrf_token %}
-            <fieldset>
-                <label for="username" placeholder="your-username">Nome de usuário</label>
-                <input type="text" name="username">
-            </fieldset>
-            <fieldset>
-                <label for="password" placeholder="your-password">Senha</label>
-                <input type="password" name="password">
-            </fieldset>
-            <button type="submit">Entrar</button>
-        </form>
-        {% if error == '1' %}
-        <div id="error-msg">
-            <p>Erro: Usuário ou senha incorreta</p>
-        </div>
-        {% endif %}
-        <div class="links">
-            <a href="/signup/">Cadastrar-se</a>
-            <a href="#">Recuperar senha</a>
-        </div>
-    </main>
-</body>
-</html>
+{% endblock form %}

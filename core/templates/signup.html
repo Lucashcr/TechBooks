@@ -1,68 +1,51 @@
-{% load static %}
+{% extends 'base/form.html' %}
 
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block form %}
 
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
-    <link rel="shortcut icon" href="{% static 'images/favicon/favicon.png' %}">
+<h1>Cadastrar</h1>
 
-    <title>{{title}}</title>
-</head>
-<body>
-    <main>
-        <h1>Cadastrar</h1>
+<form action="" method="POST"> {% csrf_token %}
+    <fieldset>
+        <label for="username" placeholder="your-username">Nome de usuário</label>
+        <input type="text" name="username" value="{{request.GET.username}}">
+    </fieldset>
+    <fieldset>
+        <label for="email" placeholder="your-email">Email</label>
+        <input type="email" name="email">
+    </fieldset>
+    <fieldset>
+        <label for="first-name" placeholder="your-first-name">Nome</label>
+        <input type="first-name" name="first-name">
+    </fieldset>
+    <fieldset>
+        <label for="last-name" placeholder="your-last-name">Sobrenome</label>
+        <input type="last-name" name="last-name">
+    </fieldset>
+    <fieldset>
+        <label for="password" placeholder="your-password">Senha</label>
+        <input type="password" name="password">
+    </fieldset>
+    <fieldset>
+        <label for="confirm-password" placeholder="confirm-your-password">Confirmar senha</label>
+        <input type="password" name="confirm-password">
+    </fieldset>
+    <button type="submit">Cadastrar</button>
+</form>
+{% if error == 1 %}
+<div id="error-msg">
+    <p>Erro: Usuário ou email cadastrado</p>
+</div>
+{% elif error == 2 %}
+<div id="error-msg">
+    <p>Erro: As senhas não correspondem</p>
+</div>
+{% elif error == 3 %}
+<div id="error-msg">
+    <p>Erro: Senha inválida</p>
+    {% for m in msg %}
+    <p>{{m}}</p>
+    {% endfor %}
+</div>
+{% endif %}
 
-        <form action="" method="POST"> {% csrf_token %}
-            <fieldset>
-                <label for="username" placeholder="your-username">Nome de usuário</label>
-                <input type="text" name="username" value="{{request.GET.username}}">
-            </fieldset>
-            <fieldset>
-                <label for="email" placeholder="your-email">Email</label>
-                <input type="email" name="email">
-            </fieldset>
-            <fieldset>
-                <label for="first-name" placeholder="your-first-name">Nome</label>
-                <input type="first-name" name="first-name">
-            </fieldset>
-            <fieldset>
-                <label for="last-name" placeholder="your-last-name">Sobrenome</label>
-                <input type="last-name" name="last-name">
-            </fieldset>
-            <fieldset>
-                <label for="password" placeholder="your-password">Senha</label>
-                <input type="password" name="password">
-            </fieldset>
-            <fieldset>
-                <label for="confirm-password" placeholder="confirm-your-password">Confirmar senha</label>
-                <input type="password" name="confirm-password">
-            </fieldset>
-            <button type="submit">Cadastrar</button>
-        </form>
-        {% if error == 1 %}
-        <div id="error-msg">
-            <p>Erro: Usuário ou email cadastrado</p>
-        </div>
-        {% elif error == 2 %}
-        <div id="error-msg">
-            <p>Erro: As senhas não correspondem</p>
-        </div>
-        {% elif error == 3 %}
-        <div id="error-msg">
-            <p>Erro: Senha inválida</p>
-            {% for m in msg %}
-            <p>{{m}}</p>
-            {% endfor %}
-        </div>
-        {% endif %}
-        <!-- <div class="links">
-            <a href="#">Cadastrar-se</a>
-            <a href="#">Recuperar senha</a>
-        </div> -->
-    </main>
-</body>
-</html>
+{% endblock form %}

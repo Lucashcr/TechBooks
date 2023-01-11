@@ -1,0 +1,22 @@
+{% extends 'base/form.html' %}
+
+{% block form %}
+
+<h1>Confirmar email</h1>
+<form action="" method="POST"> {% csrf_token %}
+    <fieldset>
+        <label for="confirm_code" placeholder="confirm_code">Código</label>
+        <input type="confirm_code" name="confirm_code">
+    </fieldset>
+    <button type="submit">Verificar</button>
+</form>
+{% if error == 1 %}
+<div id="error-msg">
+    <p>Erro: Código incorreto</p>
+</div>
+{% endif %}
+<div class="links">
+    <a href="/signup/">Tentar novamente</a>
+</div>
+
+{% endblock form %}

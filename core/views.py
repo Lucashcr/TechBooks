@@ -3,10 +3,10 @@ from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, View
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.core.exceptions import ValidationError
 
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-import random, smtplib
+import random
 
 from .models import Book, Subject
 
@@ -43,7 +43,7 @@ class Login(FormView):
             return redirect(_next if _next is not None else '/books/')
         else:
             _next = request.GET.get('next')
-            request.session['error'] = '1'
+            request.session['error'] = 1
             request.session['next'] = request.session.get('next')
             return redirect(f'/login/')
         
@@ -149,16 +149,22 @@ class SignUp(TemplateView):
         last_name = request.POST.get('last-name')
         password = request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
+
+        
+        new_user = User(
+            username=username, email=email, password=password,
+            first_name=first_name, last_name=last_name
+        )
         
         try:
-            User.objects.get(username=username)
+            User.objects.get(username=new_user.username)
         except User.DoesNotExist:
             username_exists = False
         else:
             username_exists = True
         
         try:
-            User.objects.get(email=email)
+            User.objects.get(email=new_user.email)
         except User.DoesNotExist:
             email_exists = False
         else:
@@ -173,17 +179,51 @@ class SignUp(TemplateView):
             return redirect('/signup/')
 
         try:
-            password_validation.validate_password(password)
-        except Exception as msg:
+            password_validation.validate_password(new_user.password, new_user)
+        except ValidationError as msg:
             request.session['error'] = 3
             request.session['msg'] = tuple(msg)
 
-            return redirect(f'/signup/')
+            return redirect('/signup/')
 
-        self.send_confirmation_email(email, first_name, username)
+        confirm_code = str(random.randint(100000, 999999))
+        new_user.email_user(
+            'Teste',
+            f'Codigo de confirmação - {confirm_code}',
+            'lucash.rocha123@gmail.com'
+        )
 
-        return redirect('/confirm')
+        request.session['confirm_code'] = confirm_code
+        request.session['new_user'] = dict(
+            username=username, email=email, password=password,
+            first_name=first_name, last_name=last_name
+        )
+
+        return redirect('/confirm/')
 
 
-        def send_confirmation_email(self, email, first_name, username):
-            pass
+class Confirm(View):
+    extra_context = {
+        'title': 'TechBooks - Confirmar email', 
+    }
+
+    def get(self, request, *args, **kwargs):
+        self.extra_context['error'] = request.session.get('error')
+        return render(request, 'confirm.html', self.extra_context)
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get('confirm_code') == request.session['confirm_code']:
+            new_user = request.session['new_user']
+            print(new_user['password'])
+            User(
+                username = new_user['username'],
+                email = new_user['email'],
+                first_name = new_user['first_name'],
+                last_name = new_user['last_name'],
+                password = new_user['password']
+            ).save()
+            request.session['error'] = 2
+            return redirect('/login/')
+        else:
+            request.session['error'] = 1
+            return redirect('/confirm/')
