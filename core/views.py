@@ -3,7 +3,7 @@ from django.views import View
 from django.views.generic import TemplateView, FormView, ListView, View
 from django.contrib.auth import authenticate, login, logout, password_validation
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 
 import random
@@ -152,7 +152,7 @@ class SignUp(TemplateView):
 
         
         new_user = User(
-            username=username, email=email, password=password,
+            username=username, email=email, password=make_password(password),
             first_name=first_name, last_name=last_name
         )
         
@@ -188,14 +188,14 @@ class SignUp(TemplateView):
 
         confirm_code = str(random.randint(100000, 999999))
         new_user.email_user(
-            'Teste',
-            f'Codigo de confirmação - {confirm_code}',
-            'lucash.rocha123@gmail.com'
+            'TechBooks - Confirmação de Email',
+            f'',
+            html_message = f'Codigo de confirmação - <strong>{confirm_code}</strong>',
         )
 
         request.session['confirm_code'] = confirm_code
         request.session['new_user'] = dict(
-            username=username, email=email, password=password,
+            username=username, email=email, password=make_password(password),
             first_name=first_name, last_name=last_name
         )
 
@@ -214,7 +214,6 @@ class Confirm(View):
     def post(self, request, *args, **kwargs):
         if request.POST.get('confirm_code') == request.session['confirm_code']:
             new_user = request.session['new_user']
-            print(new_user['password'])
             User(
                 username = new_user['username'],
                 email = new_user['email'],

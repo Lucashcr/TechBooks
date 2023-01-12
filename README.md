@@ -15,4 +15,4 @@ Usuário de Administração:
 Próximos passos:
 - [x] Formulário de cadastro de usuários
 - [x] Confirmar email ao cadastrar
-- [ ] Corrigir erro de cadasro de password
+- [x] Corrigir erro de cadasro de password
